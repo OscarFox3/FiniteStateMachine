@@ -1,5 +1,6 @@
+# Guess My Card
+
 # Uses a finite state machine
-#   Should have at least: "win", "quit", "lower", "higher"
 
 # creates a "game loop" within a rungame() function
 # Setups base variables using an init() function
@@ -7,7 +8,6 @@
 # Checks the value of the state and alters it with the fuctions:
 #   getsuit
 #   getvalue
-#   may have a getsuit_and_value function
 #   update
 #   render
 
@@ -27,26 +27,29 @@ states = {
         }
 
 suits = {"hearts", "spades", "clubs", "diamonds"}
-values = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', "joker", "queen", "king", "Ace"}
+values = {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
+          "joker": 11, "queen": 12, "king": 13, "Ace": 1}
 
 
 def init():
     """
-    Initialize game, and generates a random int (1 - 10)
+    Initialize game, and generates a suit and value
     And prints our intro screen
 
     returns:
     * gamestate - None object as we just started
+    * correctsuit
+    * correctvalue
     """
     global suits
     global values
 
     print("Welcome Player! Please guess card with suit and value.")
-    return "", sample(suits, 1)[0], int(sample(values, 1)[0])
+    return "", sample(suits, 1)[0], sample(list(values.values()), 1)[0]
 
 
 def getsuit():
-    guess_suit = input("What is the correct suit?")
+    guess_suit = input("What is the correct suit? ")
     if guess_suit.lower() == "quit":
         return None
 
@@ -55,10 +58,9 @@ def getsuit():
 
 def getvalue():
     while True:
-        value = input("What is the correct value?")
-
+        # value = input("What is the correct value?")
         try:
-            guess_value = int(value)
+            guess_value = int(input("What is the correct value? "))
             break
         except ValueError:
             print("Please type a number without decimals!")
@@ -114,8 +116,7 @@ def render(gamestate):
 def rungame():
     # Game loop
     gamestate, correct_suit, correct_value = init()
-    print(correct_suit)
-    print(correct_value)
+
     while gamestate != "win" and gamestate != "quit":
         guess_suit = getsuit()
         guess_value = getvalue()
